@@ -9,8 +9,12 @@ const User = require('./models/User');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Read MongoDB URI from environment (.env). Support either MONGODB_URI or legacy URI var.
-const MONGODB_URI = process.env.MONGODB_URI || process.env.URI || 'mongodb+srv://s1347969:3024@cluster0.ypkudjv.mongodb.net/taskmanager?retryWrites=true&w=majority&appName=Cluster0';
+// Read MongoDB URI from environment (.env). Require it in production to avoid leaking credentials.
+const MONGODB_URI = process.env.MONGODB_URI || process.env.URI;
+if (!MONGODB_URI) {
+  console.error('MONGODB_URI is not set. Please add it to your .env or configure it in your environment.');
+  process.exit(1);
+}
 // Middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
