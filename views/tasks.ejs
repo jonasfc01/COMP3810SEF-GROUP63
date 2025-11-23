@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tasks - Task Manager</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Task Manager</h1>
+            <div class="user-info">
+                Welcome, <%= user.username %>!
+                <form action="/logout" method="POST" style="display: inline;">
+                    <button type="submit" class="btn-logout">Logout</button>
+                </form>
+            </div>
+        </header>
+        
+        <nav class="sidebar">
+            <ul>
+                <li><a href="/dashboard">Dashboard</a></li>
+                <li><a href="/tasks" class="active">View All Tasks</a></li>
+                <li><a href="/tasks/create">Create New Task</a></li>
+                <% if (user.username === 'admin') { %>
+                    <li><a href="/users">Manage Users</a></li>
+                    <li><a href="/users/create">Create User</a></li>
+                <% } %>
+            </ul>
+        </nav>
+        
+        <main class="content">
+            <div class="tasks-header">
+                <h2>My Tasks</h2>
+                <a href="/tasks/create" class="btn btn-primary">+ Create New Task</a>
+            </div>
+
+            <% if (error) { %>
+                <div class="error"><%= error %></div>
+            <% } %>
+
+            <% if (tasks && tasks.length > 0) { %>
+                <div class="tasks-grid">
+                    <% tasks.forEach(task => { %>
+                        <div class="task-card">
+                            <div class="task-header">
+                                <h3><%= task.title %></h3>
+                                <span class="priority-badge priority-<%= task.priority %>">
+                                    <%= task.priority %>
+                                </span>
+                            </div>
+                            
+                            <% if (task.description) { %>
+                                <p class="task-description"><%= task.description %></p>
+                            <% } %>
+                            
+                            <div class="task-meta">
+                                <span class="status-badge status-<%= task.status %>">
+                                    <%= task.status %>
+                                </span>
+                                <% if (task.createdAt) { %>
+                                    <span class="task-date">
+                                        Created: <%= new Date(task.createdAt).toLocaleDateString() %>
+                                    </span>
+                                <% } %>
+                            </div>
+                            
+                            <div class="task-actions">
+                                <a href="/tasks/edit/<%= task._id %>" class="btn btn-sm btn-edit">Edit</a>
+                                <form action="/tasks/delete/<%= task._id %>" method="POST" style="display: inline;" onsubmit="return confirm('Are you sure you want to delete this task?');">
+                                    <button type="submit" class="btn btn-sm btn-delete">Delete</button>
+                                </form>
+                            </div>
+                        </div>
+                    <% }); %>
+                </div>
+            <% } else { %>
+                <div class="empty-state">
+                    <p>No tasks found. Create your first task to get started!</p>
+                    <a href="/tasks/create" class="btn btn-primary">Create Task</a>
+                </div>
+            <% } %>
+        </main>
+    </div>
+</body>
+</html>

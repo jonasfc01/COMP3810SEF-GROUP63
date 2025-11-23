@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Task Manager</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Task Manager Dashboard</h1>
+            <div class="user-info">
+                Welcome, <%= user.username %>!
+                <form action="/logout" method="POST" style="display: inline;">
+                    <button type="submit" class="btn-logout">Logout</button>
+                </form>
+            </div>
+        </header>
+        
+        <nav class="sidebar">
+            <ul>
+                <li><a href="/dashboard" class="active">Dashboard</a></li>
+                <li><a href="/tasks">View All Tasks</a></li>
+                <li><a href="/tasks/create">Create New Task</a></li>
+                <% if (user.username === 'admin') { %>
+                    <li><a href="/users">Manage Users</a></li>
+                    <li><a href="/users/create">Create User</a></li>
+                <% } %>
+            </ul>
+        </nav>
+        
+        <main class="content">
+            <div class="welcome-section">
+                <h2>Welcome to Your Task Manager</h2>
+                <p>Use the navigation menu to manage your tasks<% if (user.username === 'admin') { %> and users<% } %> efficiently.</p>
+                <div class="quick-actions">
+                    <a href="/tasks/create" class="btn btn-primary">Create New Task</a>
+                    <a href="/tasks" class="btn btn-secondary">View All Tasks</a>
+                    <% if (user.username === 'admin') { %>
+                        <a href="/users" class="btn btn-secondary">Manage Users</a>
+                    <% } %>
+                </div>
+            </div>
+        </main>
+    </div>
+</body>
+</html>
