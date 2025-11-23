@@ -9,6 +9,8 @@ const User = require('./models/User');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+// Read MongoDB URI from environment (.env). Support either MONGODB_URI or legacy URI var.
+const MONGODB_URI = process.env.MONGODB_URI || process.env.URI || 'mongodb+srv://s1347969:3024@cluster0.ypkudjv.mongodb.net/taskmanager?retryWrites=true&w=majority&appName=Cluster0';
 // Middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -27,7 +29,7 @@ app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
 // Database connection
-const MONGODB_URI = process.env.MONGODB_URI || 'mongodb+srv://s1347969:3024@cluster0.ypkudjv.mongodb.net/taskmanager?retryWrites=true&w=majority&appName=Cluster0';
+
 
 mongoose.connect(MONGODB_URI)
   .then(() => {
